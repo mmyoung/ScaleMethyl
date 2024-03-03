@@ -318,6 +318,8 @@ tag "$sample"
 label 'py_process'
 script:
 	"""
+	export HOME="\${PWD}/HOME"
+	export TMPDIR=\$(mktemp -p `pwd` -d) 
 	generateMetrics.py --sampleName ${sample} --tgmt_barcodes ${references}/tgmt.txt --topCellPercentage ${params.topCellPercentile} --threshold $threshold --cellInfo ${cell_info_stats} --cellStats ${cell_stats}\
 	--minCellRatio ${params.minCellRatio} --minReads ${params.minUniqCount} --minUniqTotal ${params.minUniqTotal} --maxUniqTotal ${params.maxUniqTotal} --i5_barcodes ${references}/i5.txt --i7_barcodes ${references}/i7.txt\
 	"""
@@ -366,6 +368,8 @@ script:
 		opts = opts + "--reporting_only"
 	}
 	"""
+	export HOME="\${PWD}/HOME"
+	export TMPDIR=\$(mktemp -p `pwd` -d) 
 	generateSampleReport.py --sampleName ${sample} --outDir ${sample} --tgmt_barcodes ${references}/tgmt.txt --allCells ${allCells} --passingCellsMapMethylStats ${methyl_stats} \
 	--fragmentHist ${fragment_hist} --outDir ${sample} --tssEnrich ${tss_enrich} --dedupStats ${dedup_stats} $opts
 	"""
@@ -389,6 +393,7 @@ tag "$libName"
 label 'py_process'
 script:
 	"""
+	export HOME="\${PWD}/HOME"
 	export TMPDIR=\$(mktemp -p `pwd` -d)
 	combined_sample_report.py --libraryName ${libName} --outDir ${libName} --complexity_stats ${complexity_stats} --methyl_stats ${methyl_stats} \
 	--passing_met_stats ${passing_met_stats} --i5_barcodes ${references}/i5.txt --i7_barcodes ${references}/i7.txt --tgmt_barcodes ${references}/tgmt.txt
